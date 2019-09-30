@@ -1,5 +1,5 @@
-# queryCache
-
+# query_cache
+ 
 ## Synopsis
 
 The query cache is an incremental cache for complex result sets that have at least one monotone incremental attribute - that is time stamp at the time of writing - and where there is no removal from the cached dataset. The cache is used in a scenario that is not write intensive, but the data sets are results of expensive computation.
