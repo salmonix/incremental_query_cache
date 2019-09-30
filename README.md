@@ -121,4 +121,4 @@ The query_cache.query_cache_metadata stores the information about each cached qu
 
 # Licencing
 
-The extension is released under [PostgreSQL License](Licence.md). For the quick summary of use of the license, see [this link](https%3A%2F%2Ftldrlegal.com%2Flicense%2Fpostgresql-license-%28postgresql%29).
+The extension is released under [PostgreSQL License](Licence.md). For the quick summary of use of the license, see [this link](https://tldrlegal.com/license/postgresql-license-(postgresql)).
