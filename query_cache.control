@@ -1,0 +1,5 @@
+# query_cache
+comment = 'A cache namespace and functions to cache datasets'
+default_version = '0.0.1'
+relocatable = false
+schema = query_cache
