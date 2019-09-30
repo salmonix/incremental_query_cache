@@ -121,13 +121,4 @@ The query_cache.query_cache_metadata stores the information about each cached qu
 
 # Licencing
 
-The extension is released under PostgreSQL License. For the quick summary of use of the license, see [this link](https://tldrlegal.com/license/postgresql-license-(postgresql).
-
-
-Copyright (c) 2019, think project! GmbH.
-
-Permission to use, copy, modify, and distribute this software and its documentation for any purpose, without fee, and without a written agreement is hereby granted, provided that the above copyright notice and this paragraph and the following two paragraphs appear in all copies.
-
-IN NO EVENT SHALL think project! GmbH. BE LIABLE TO ANY PARTY FOR DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION, EVEN IF $ORGANISATION HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-think project! Gmbh. SPECIFICALLY DISCLAIMS ANY WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. THE SOFTWARE PROVIDED HEREUNDER IS ON AN "AS IS" BASIS, AND $ORGANISATION HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
+The extension is released under [PostgreSQL License](Licence.md). For the quick summary of use of the license, see [this link](https%3A%2F%2Ftldrlegal.com%2Flicense%2Fpostgresql-license-%28postgresql%29).
