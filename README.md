@@ -2,7 +2,17 @@
  
 ## Synopsis
 
-The query cache is an incremental cache for complex result sets that have at least one monotone incremental attribute - that is time stamp at the time of writing - and where there is no removal from the cached dataset. The cache is used in a scenario that is not write intensive, but the data sets are results of expensive computation.
+The query cache stores the result set of queries and offers a simple API to update that result set. The cache table is identified by the query itself. The query must return entities that can be uniquely indexed to update _entities_ of the result set.
+For detecting changes the use of a last_change TS attribute in the source table is proposed. 
+
+Note: see the Milan_PgConf_2019_Presentation.ppx file, from slide xxx. 
+
+## Limitations
+
+1. currently there is no DELETE algorithm implemented
+2. the result set must have a unique key constraint
+3. the user must provide the update SQL
+
 
 ## Installation
 
@@ -24,8 +34,7 @@ Notes: The extension is written in plpgsql and has no external dependencies. The
 
 ## Concept
 
-Compared to low level approaches, there is no heuristics to figure out how to chache and update the result set.
-The client is expected to know his query and table structure, can provide the update SQL and writes a minimum boilerplate code to use the cache properly. For automated update wrap the boilerplate code into a procedure and use a cron, eg. [pg_cron](https://github.com/citusdata/pg_cron).
+The client is expected to know his query and table structure, can provide the update logic and writes a minimum boilerplate client code to use the cache. For automated update wrap the boilerplate code into a procedure and use a cron, eg. [pg_cron](https://github.com/citusdata/pg_cron).
 
 The cache is wrapped in a set of stored procedures serving as API. The query is on-demand updated by the client via the proper API calls. On each update the query calculates the deltas since the last call, using the incremental attibute, updates the cache and returns the table name of the cached values to the client.
 
@@ -79,18 +88,22 @@ Currently no sophisticated method is implemented to remove entries from a cached
 
 ### Example
 
-We assume that in our system there is a _department_ table storing the members of the departments. If any entity is changed then the it can potentially invalidate a cache. That likely requires a DELETE/UPDATE trigger on the _department_ table. In the example the key in the invalidation JSON object is 'department', the value is an ARRAY of primary keys of the department table.
+We assume that in our system there is _employee_ table, E,  and a _departments_ table, D. Our query is a left JOIN on the tables, as
 
-     {invalidation : { "department" : [ 1,2,3] } }
+Q = E &#8904; D ; where E has the Unique key as E(pk).
 
-A corresponding trigger is created on the _department_ table. On UPDATE or DELETE, the query_cache invalidation procedure is called with the parameter 'specifications' and the id of the changed or deleted entity, removing all the corresponding caches - ie. caches that are associated with the arguments passed to the query_cache API in the trigger.
+If the name of the department is changed, then the cache is invalid. Assume that the user does not provide an UPDATE sql for that case. Then the cache entry could be invalidated using a DELETE/UPDATE trigger on the _departments_ table. In the example the key in the invalidation JSON object is '_department_', the value is an ARRAY of primary keys of the _departments_ table.
+
+     {invalidation : { "employee" : [ 1,2,3] } }
+
+A corresponding trigger is created on the _departments_ table. On UPDATE or DELETE, the query_cache invalidation procedure is called with the parameter 'specifications' and the id of the changed or deleted entity, removing all the corresponding caches - ie. caches that are associated with the arguments passed to the query_cache API in the trigger.
 
 ```sql
 
 CREATE OR REPLACE FUNCTION public.department_invalidate_cache_fn() RETURNS TRIGGER AS $$
 BEGIN
 
-  PERFORM * FROM query_cache.delete_invalid_cache('department',OLD.id); -- remove any cache associated with 'department' and OLD.id
+  PERFORM * FROM query_cache.delete_invalid_cache('departments',OLD.id); -- remove any cache associated with 'department' and OLD.id
   CASE TG_OP
     WHEN 'DELETE' THEN RETURN OLD;
     WHEN 'UPDATE' THEN RETURN NEW;
