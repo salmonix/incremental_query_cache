@@ -1,14 +1,14 @@
-begin transaction;
+BEGIN transaction;
 
 
-create extension query_cache;
+CREATE extension query_cache;
 
 /* STRUCTURAL TESTS FOR THE EXTENSION
   - check for table structure
   - functions and their parameter signature
 */
-select table_name, column_name, data_type from information_schema.columns
-where table_schema = 'query_cache' order by table_name, column_name;
+SELECT table_name, column_name, data_type FROM information_schema.columns
+WHERE table_schema = 'query_cache' ORDER BY table_name, column_name;
 
 SELECT routines.routine_name, parameters.data_type, parameters.ordinal_position
 FROM information_schema.routines
@@ -17,11 +17,11 @@ WHERE routines.specific_schema='query_cache'
 ORDER BY routines.routine_name, parameters.ordinal_position;
 
 
-select event_object_table as table_name, trigger_schema, trigger_name,
-       string_agg(event_manipulation, ',') as event, action_timing,
-       action_condition as condition
-from information_schema.triggers
-where event_object_schema = 'query_cache' group by 1,2,3,5,6 order by table_name;
+SELECT event_object_table AS table_name, trigger_schema, trigger_name,
+       string_agg(event_manipulation, ',') AS event, action_timing,
+       action_condition AS condition
+FROM information_schema.triggers
+WHERE event_object_schema = 'query_cache' group by 1,2,3,5,6 order by table_name;
 
 
 /* FUNCTIONAL TESTS FOR THE EXTENSION
@@ -68,6 +68,6 @@ SELECT * FROM query_cache.cache_query(
   'SELECT * FROM data_table', 123,'{id,last_value_ts}','{"invalidation": {"department" : [1,2,3]}}'::JSONB);
 
 -- CLEAN UP
-drop extension query_cache cascade;
+DROP extension query_cache cascade;
 
-rollback;
+ROLLBACK;
