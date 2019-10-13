@@ -5,7 +5,7 @@
 The query cache stores the result set of queries and offers a simple API to update that result set. The cache table is identified by the query itself. The query must return entities that can be uniquely indexed to update _entities_ of the result set.
 For detecting changes the use of a last_change TS attribute in the source table is proposed. 
 
-Note: see the Milan_PgConf_2019_Presentation.ppx file, from slide xxx. 
+Note: for some background details see the Milan_PgConf_2019_Presentation.odp file, from slide 9.
 
 ## Limitations
 
