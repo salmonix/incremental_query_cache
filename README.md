@@ -3,10 +3,9 @@
 ## Synopsis
 
 The query cache stores the result set of queries and offers a simple API to update that result set. The cache table is identified by the query itself. The query must return entities that can be uniquely indexed to update _entities_ of the result set.
-For detecting changes the use of a last_change TS attribute in the source table, but any monotonic incremental attribute can be used. 
+For detecting changes the use of a last_change TS attribute in the source table, but any monotonic incremental attribute can be used. The advantage of using a TS is taht it is the same in the whole database, the disadvantage is that it depends on the environment (not pure function). It may mean problems with clock skew or other changes in the DB or system time understaning. Using an incremental attribute on a table has the advantage of being deterministic but depends on the table.
 
 Note: for some background details see the Milan_PgConf_2019_Presentation.odp file, from slide 9.
-Note: The TS is non pure, that means eg. prone to clock skews.
 
 ## Limitations
 
