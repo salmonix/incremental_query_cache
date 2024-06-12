@@ -1,17 +1,23 @@
-# query_cache
- 
+# incremental_query_cache
+
+One solution to the Incremental View Maintenance problem.
+
 ## Synopsis
 
-The query cache stores the result set of queries and offers a simple API to update that result set. The cache table is identified by the query itself. The query must return entities that can be uniquely indexed to update _entities_ of the result set.
-For detecting changes the use of a last_change TS attribute in the source table, but any monotonic incremental attribute can be used. The advantage of using a TS is taht it is the same in the whole database, the disadvantage is that it depends on the environment (not pure function). It may mean problems with clock skew or other changes in the DB or system time understaning. Using an incremental attribute on a table has the advantage of being deterministic but depends on the table.
+The query cache, similarly to a materialized view, stores the result set of queries and offers a simple API to update that result set. The logical differences are the followings:
+
+- the main source table (most likely the biggest one in of the query) must contain a monotonic incremental attribute (eg. TS, PK)
+- calling the cache only the deltas are calculated since the last call
+
+Implementational differences:
+
+- client code need some adaptation: the user must provide the update SQL for updating the view.
 
 Note: for some background details see the Milan_PgConf_2019_Presentation.odp file, from slide 9.
 
 ## Limitations
 
-1. currently there is no DELETE algorithm implemented
-2. the result set must have a unique key constraint
-3. the user must provide the update SQL
+- currently there is no DELETE algorithm implemented
 
 
 ## Installation
