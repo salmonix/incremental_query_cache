@@ -1,0 +1,4 @@
+# Query cache: a solution to incremental view maintenance problem
+
+The problem of caching slow queries - where slow varies by your mileage - time opens the can of worms of cache invalidation problem: how can we be sure that the cache is up to date? How can we propagate the changes in the reference dataset into the cache? Depending the scenar differences are acceptable or not at all. When we come to a database our expectation is that the database serves us with the reference data of the persistence layer, thus any cache solution is only an extra feature to the user. 
+The major user space cache is a materialized view, where the query results are stored in a table. To keep it updated with the source tables it requires REFRESH defined by the user. However, as these views can be expensive, so can be their updates: the database does not only have to run the query but must also store it.
